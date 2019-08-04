@@ -1,14 +1,21 @@
 package ru.saintunix.pool;
 
+import ru.saintunix.utils.Option;
+
 import java.util.List;
 
 public class Server implements ManageServer {
     private int id;
     private boolean status = true;
 
-    private List<ManageServer> nodes;
+    private List<Option<ManageServer>> nodes;
 
-    public Server(int id, List<ManageServer> nodes) {
+//    public Server(int id, List<ManageServer> nodes) {
+//        this.id = id;
+//        this.nodes = nodes;
+//    }
+
+    public Server(int id, List<Option<ManageServer>> nodes) {
         this.id = id;
         this.nodes = nodes;
     }
@@ -29,15 +36,15 @@ public class Server implements ManageServer {
     }
 
     @Override
-    public List<ManageServer> getPoolServers() {
+    public List<Option<ManageServer>> getPoolServers() {
         return nodes;
     }
 
     @Override
     public String toString() {
         StringBuilder data = new StringBuilder(String.format("Server: { id: %d, availability: %s }\n", id, status));
-        for (ManageServer srv : nodes) {
-            data.append("\t").append(srv).append("\n");
+        for (Option<ManageServer> srv : nodes) {
+            data.append("\t").append(srv.get()).append("\n");
         }
 
         return data.toString();
