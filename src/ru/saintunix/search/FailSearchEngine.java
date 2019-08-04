@@ -1,5 +1,6 @@
 package ru.saintunix.search;
 
+import ru.saintunix.exceptions.FailedServerNotFound;
 import ru.saintunix.pool.Cluster;
 import ru.saintunix.pool.ManageServer;
 
@@ -11,15 +12,20 @@ public class FailSearchEngine {
     public void search(Cluster cluster) {
         this.cluster = cluster;
 
-        int failServer = searchFailServer(cluster.getPoolServers());
-        int failNode = searchFailServer(cluster.getPoolServers().get(failServer).getPoolServers());
+        try {
+            int failServer = searchFailServer(cluster.getPoolServers());
+            int failNode = searchFailServer(cluster.getPoolServers().get(failServer).getPoolServers());
+            System.out.printf("Failed server: %d, node: %d ", failServer, failNode);
 
-        System.out.printf("Failed server: %d, node: %d ", failServer, failNode);
+        } catch (FailedServerNotFound e) {
+            System.out.println("Failed server not found!");
+            e.printStackTrace();
+        }
     }
 
-    private int searchFailServer(List<ManageServer> srv) {
+    private int searchFailServer(List<ManageServer> srv) throws FailedServerNotFound {
         if (srv.size() == 0)
-            return -1;
+            throw new FailedServerNotFound();
 
         int mid = (srv.size() / 2);
 

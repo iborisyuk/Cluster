@@ -1,5 +1,7 @@
 package ru.saintunix.pool;
 
+import ru.saintunix.exceptions.ServerNotNode;
+
 import java.util.List;
 
 public class Node implements ManageServer {
@@ -32,7 +34,7 @@ public class Node implements ManageServer {
 
     @Override
     public List<ManageServer> getPoolServers() {
-        return null;
+        throw new ServerNotNode("Class Node does not contains other servers.");
     }
 
 }
